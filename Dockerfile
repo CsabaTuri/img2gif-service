@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY src/ ./src/
 
-CMD ["python", "-u", "src/handler.py"]
+CMD ["python", "-u", "handler.py"]
