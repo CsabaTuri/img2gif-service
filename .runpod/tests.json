@@ -1,12 +1,13 @@
 {
   "tests": [
     {
-      "name": "basic_test",
+      "name": "basic_inference",
       "input": {
-        "instruction": "Animate this image smoothly",
+        "image_base64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "instruction": "Animate this image",
         "num_frames": 16
       },
-      "timeout": 300000
+      "timeout": 600000
     }
   ]
 }
