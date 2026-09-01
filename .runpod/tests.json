@@ -1,0 +1,12 @@
+{
+  "tests": [
+    {
+      "name": "basic_test",
+      "input": {
+        "instruction": "Animate this image smoothly",
+        "num_frames": 16
+      },
+      "timeout": 300000
+    }
+  ]
+}

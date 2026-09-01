@@ -1,0 +1,10 @@
+{
+  "title": "Image to GIF Service",
+  "description": "Generates GIF animations from images using Ollama and AnimateDiff",
+  "type": "serverless",
+  "category": "image",
+  "config": {
+    "runsOn": "GPU",
+    "containerDiskInGb": 20
+  }
+}
