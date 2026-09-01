@@ -1,26 +1,37 @@
 import runpod
-from app import service
+import os
+from vllm import LLM, SamplingParams
 
-def handler(event):
-    job_input = event.get("input", {})
+# Modell inicializálása indításkor (cold start alatt egyszer fut le)
+model_name = os.getenv("MODEL_NAME", "Qwen/Qwen3-Coder-30B-A3B-Instruct")
+llm = LLM(
+    model=model_name,
+    tensor_parallel_size=1,
+    gpu_memory_utilization=0.95,
+    max_model_len=8192,
+    enforce_eager=False
+)
+
+def handler(job):
+    job_input = job.get("input", {})
+    prompt = job_input.get("prompt", "")
     
-    image_b64 = job_input.get("image_base64")
-    instruction = job_input.get("instruction", "Animate this image smoothly")
-    num_frames = job_input.get("num_frames", 16)
-
-    if not image_b64:
-        return {"status": "error", "message": "Hiányzik az 'image_base64' mező!"}
+    if not prompt:
+        return {"status": "error", "message": "Hiányzik a 'prompt' mező!"}
 
     try:
-        gif_b64 = service.generate_gif_from_image(
-            image_b64=image_b64,
-            instruction=instruction,
-            num_frames=num_frames
+        sampling_params = SamplingParams(
+            temperature=job_input.get("temperature", 0.7),
+            max_tokens=job_input.get("max_tokens", 2048),
+            repetition_penalty=1.05
         )
+        
+        outputs = llm.generate([prompt], sampling_params)
+        generated_text = outputs[0].outputs[0].text
+        
         return {
             "status": "success",
-            "format": "gif",
-            "gif_base64": gif_b64
+            "generated_text": generated_text
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}
